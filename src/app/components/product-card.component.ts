@@ -1,0 +1,117 @@
+import { Component, Input, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CartService } from '../services/cart.service';
+import { Product } from '../models/product';
+
+@Component({
+  selector: 'product-card',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <article class="product-card">
+      <img [src]="product.image" [alt]="product.title" />
+      <div class="product-info">
+        <div>
+          <h3>{{ product.title }}</h3>
+          <p class="author">{{ product.author }}</p>
+        </div>
+        <p class="rating">⭐ {{ product.rating.toFixed(1) }}</p>
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+      <div class="product-footer">
+        <span class="price">R$ {{ product.price | number:'1.2-2' }}</span>
+        <button
+          type="button"
+          [disabled]="!product.available"
+          (click)="addToCart()"
+        >
+          {{ product.available ? 'Adicionar ao carrinho' : 'Esgotado' }}
+        </button>
+      </div>
+    </article>
+  `,
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .product-card {
+        border: 1px solid #dfe3e8;
+        border-radius: 1rem;
+        padding: 1rem;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        min-height: 100%;
+      }
+      .product-card img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        border-radius: 0.95rem;
+      }
+      .product-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .product-info h3 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      .author {
+        margin: 0.25rem 0 0;
+        color: #6b7280;
+        font-size: 0.9rem;
+      }
+      .rating {
+        font-weight: 700;
+        color: #f59e0b;
+      }
+      .description {
+        margin: 0;
+        color: #4b5563;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+      .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .price {
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+      button {
+        border: none;
+        background: #2563eb;
+        color: white;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      button:hover:not(:disabled) {
+        background: #1d4ed8;
+      }
+    `
+  ]
+})
+export class ProductCardComponent {
+  @Input({ required: true }) product!: Product;
+
+  private readonly cartService = inject(CartService);
+
+  addToCart() {
+    this.cartService.add(this.product);
+  }
+}

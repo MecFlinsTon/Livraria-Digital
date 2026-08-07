@@ -1,59 +1,62 @@
-# LivrariaDigital
+# Livraria Digital
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.20.
+Aplicação de e-commerce de livros construída com Angular 21 + SSR. O projeto apresenta um catálogo de livros, carrinho de compras reativo e componentes standalone usando `signals` do Angular.
 
-## Development server
+## Funcionalidades principais
 
-To start a local development server, run:
+- Catálogo de livros com título, autor, preço, avaliação e descrição.
+- Carrinho de compras com adição de produtos, remoção, atualização de quantidade e total de itens.
+- Estrutura de componentes standalone (`ProductCardComponent`, `CartPanelComponent` e `App`).
+- Serviço de produtos (`ProductService`) com dados estáticos de exemplo.
+- Serviço de carrinho (`CartService`) usando `signals` para estado reativo.
+- Suporte a Server-Side Rendering (SSR) com `@angular/ssr` e `express`.
 
-```bash
-ng serve
-```
+## Como executar
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. Instale as dependências:
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
-
-To build the project run:
+2. Inicie o servidor de desenvolvimento:
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+3. Abra o navegador em:
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```text
+http://localhost:4200/
 ```
 
-## Running end-to-end tests
+## Scripts úteis
 
-For end-to-end (e2e) testing, run:
+- `npm start` - inicia o servidor de desenvolvimento Angular.
+- `npm run build` - compila a aplicação para produção.
+- `npm run watch` - compila em modo de desenvolvimento com watch.
+- `npm run test` - executa testes de unidade com Vitest.
+- `npm run serve:ssr:Livraria-Digital` - executa a aplicação SSR gerada.
 
-```bash
-ng e2e
-```
+## Estrutura do projeto
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- `src/main.ts` - ponto de entrada do cliente Angular.
+- `src/main.server.ts` - ponto de entrada do servidor Angular.
+- `src/server.ts` - servidor Express para SSR.
+- `src/app/app.ts` - componente raiz da aplicação.
+- `src/app/services/product.service.ts` - serviço de produtos.
+- `src/app/services/cart.service.ts` - serviço de carrinho de compras.
+- `src/app/components/` - componentes de UI reutilizáveis.
 
-## Additional Resources
+## Tecnologias
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Angular 21
+- TypeScript
+- Express
+- Vitest
+- Prettier
+
+## Observações
+
+O catálogo de livros está definido no serviço `ProductService` e pode ser estendido ou substituído por uma fonte de dados real no futuro.
