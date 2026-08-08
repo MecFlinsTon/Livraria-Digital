@@ -1,4 +1,4 @@
-# Livraria Digital
+# BibliON
 
 Aplicação de e-commerce de livros construída com Angular 21 + SSR. O projeto apresenta um catálogo de livros, carrinho de compras reativo e componentes standalone usando `signals` do Angular.
 

@@ -39,11 +39,31 @@ body {
 }
 
 .eyebrow {
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.75rem;
+}
+
+.brand-name {
+  margin: 0 0 0.35rem;
+  font-size: clamp(2.3rem, 4vw, 4.25rem);
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.eyebrow-subtitle {
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  text-transform: none;
 }
 
 .hero-panel h1 {
