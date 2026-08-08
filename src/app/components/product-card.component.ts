@@ -1,18 +1,25 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 import { Product } from '../models/product';
 
 @Component({
   selector: 'product-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <article class="product-card">
-      <img [src]="product.image" [alt]="product.title" />
+      <a [routerLink]="['/product', product.id]" class="product-image-link">
+        <img [src]="product.image" [alt]="product.title" />
+      </a>
       <div class="product-info">
         <div>
-          <h3>{{ product.title }}</h3>
+          <h3>
+            <a [routerLink]="['/product', product.id]" class="product-title-link">
+              {{ product.title }}
+            </a>
+          </h3>
           <p class="author">{{ product.author }}</p>
         </div>
         <p class="rating">⭐ {{ product.rating.toFixed(1) }}</p>
@@ -46,6 +53,15 @@ import { Product } from '../models/product';
         gap: 0.9rem;
         min-height: 100%;
       }
+      .product-image-link {
+        display: block;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      .product-image-link:hover {
+        transform: scale(1.02);
+      }
       .product-card img {
         width: 100%;
         aspect-ratio: 4 / 3;
@@ -61,6 +77,14 @@ import { Product } from '../models/product';
       .product-info h3 {
         margin: 0;
         font-size: 1.05rem;
+      }
+      .product-title-link {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+      .product-title-link:hover {
+        color: #2563eb;
       }
       .author {
         margin: 0.25rem 0 0;

@@ -103,4 +103,8 @@ export class ProductService {
   getAll(): Product[] {
     return this.products();
   }
+
+  getById(id: number): Product | undefined {
+    return this.products().find(product => product.id === id);
+  }
 }
