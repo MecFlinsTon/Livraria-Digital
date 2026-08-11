@@ -26,14 +26,17 @@ import { Product } from '../models/product';
       </div>
 
       <p class="description">{{ product.description }}</p>
+      <p class="stock-badge" [class.low-stock]="product.stock <= 5 && product.stock > 0" [class.out-of-stock]="product.stock === 0">
+        {{ product.stock > 0 ? (product.stock <= 5 ? 'Estoque baixo' : 'Em estoque') : 'Sem estoque' }}
+      </p>
       <div class="product-footer">
         <span class="price">R$ {{ product.price | number:'1.2-2' }}</span>
         <button
           type="button"
-          [disabled]="!product.available"
+          [disabled]="product.stock === 0"
           (click)="addToCart()"
         >
-          {{ product.available ? 'Adicionar ao carrinho' : 'Esgotado' }}
+          {{ product.stock === 0 ? 'Me avise quando tiver em estoque' : 'Adicionar ao carrinho' }}
         </button>
       </div>
     </article>
@@ -90,6 +93,24 @@ import { Product } from '../models/product';
         margin: 0.25rem 0 0;
         color: #6b7280;
         font-size: 0.9rem;
+      }
+      .stock-badge {
+        margin: 0;
+        padding: 0.5rem 0.75rem;
+        border-radius: 999px;
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #065f46;
+        background: #d1fae5;
+      }
+      .stock-badge.low-stock {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .stock-badge.out-of-stock {
+        background: #fee2e2;
+        color: #991b1b;
       }
       .rating {
         font-weight: 700;

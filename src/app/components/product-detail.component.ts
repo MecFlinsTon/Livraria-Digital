@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../services/product.service';
@@ -24,13 +24,19 @@ import { Product } from '../models/product';
 
           <div class="rating-section">
             <span class="stars">⭐ {{ product.rating.toFixed(1) }}</span>
-            <span class="availability" [class.available]="product.available" [class.unavailable]="!product.available">
-              {{ product.available ? '✓ Em estoque' : '✗ Esgotado' }}
+            <span class="availability" [class.available]="product.stock > 0" [class.unavailable]="product.stock === 0">
+              {{ product.stock > 0 ? '✓ Em estoque' : '✗ Esgotado' }}
             </span>
           </div>
 
           <div class="price-section">
             <span class="price">R$ {{ product.price | number:'1.2-2' }}</span>
+          </div>
+
+          <div class="stock-info">
+            <span *ngIf="product.stock > 0" class="stock-available">{{ product.stock }} em estoque</span>
+            <span *ngIf="product.stock === 0" class="stock-unavailable">Produto sem estoque</span>
+            <span *ngIf="product.stock > 0 && product.stock <= 5" class="low-stock">Estoque baixo</span>
           </div>
 
           <p class="product-description">{{ product.description }}</p>
@@ -48,16 +54,22 @@ import { Product } from '../models/product';
           <div class="action-buttons">
             <button 
               class="add-to-cart-btn" 
-              [disabled]="!product.available"
+              [disabled]="product.stock === 0 || isMaxInCart()"
               (click)="addToCart()"
-              [attr.aria-label]="'Adicionar ' + product.title + ' ao carrinho'"
+              [attr.aria-label]="product.stock === 0 ? 'Produto sem estoque' : isMaxInCart() ? 'Limite de estoque atingido' : 'Adicionar ' + product.title + ' ao carrinho'"
             >
-              {{ product.available ? '🛒 Adicionar ao carrinho' : 'Produto esgotado' }}
+              {{ product.stock === 0 ? 'Me avise quando tiver em estoque' : isMaxInCart() ? 'Limite de estoque atingido' : '🛒 Adicionar ao carrinho' }}
             </button>
             <button class="wishlist-btn" [attr.aria-label]="'Adicionar ' + product.title + ' aos favoritos'">
               ♡ Adicionar aos favoritos
             </button>
           </div>
+
+          <p class="product-note" *ngIf="isMaxInCart()">
+            Você já tem {{ currentCartQuantity() }} deste produto no carrinho.
+          </p>
+
+          <p class="action-message" *ngIf="addedMessage()">{{ addedMessage() }}</p>
         </div>
       </div>
 
@@ -274,6 +286,22 @@ import { Product } from '../models/product';
         background: #1d4ed8;
       }
 
+      .product-note,
+      .action-message {
+        margin-top: 1rem;
+        padding: 0.9rem 1rem;
+        border-radius: 0.85rem;
+        background: #f8fafc;
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+      }
+
+      .action-message {
+        background: #d1fae5;
+        border-color: #a7f3d0;
+        color: #065f46;
+      }
+
       /* Responsividade */
       @media (max-width: 768px) {
         .product-detail {
@@ -341,6 +369,7 @@ import { Product } from '../models/product';
 export class ProductDetailComponent implements OnInit {
   product: Product | undefined;
   loading = true;
+  addedMessage = signal('');
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -355,11 +384,29 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  addToCart() {
-    if (this.product) {
-      this.cartService.add(this.product);
-      alert('Produto adicionado ao carrinho!');
+  currentCartQuantity(): number {
+    if (!this.product) {
+      return 0;
     }
+    const item = this.cartService.items().find((cartItem) => cartItem.product.id === this.product?.id);
+    return item ? item.quantity : 0;
+  }
+
+  isMaxInCart(): boolean {
+    return !!this.product && this.currentCartQuantity() >= this.product.stock;
+  }
+
+  addToCart() {
+    if (!this.product || this.product.stock === 0 || this.isMaxInCart()) {
+      return;
+    }
+
+    this.cartService.add(this.product);
+    this.addedMessage.set('Produto adicionado ao carrinho!');
+
+    setTimeout(() => {
+      this.addedMessage.set('');
+    }, 2800);
   }
 
   goBack() {

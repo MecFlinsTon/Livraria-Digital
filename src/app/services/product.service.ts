@@ -14,6 +14,7 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=400&q=80',
       rating: 4.8,
       description: 'Um clássico sensível sobre amizade, imaginação e humanidade.',
+      stock: 12,
       available: true
     },
     {
@@ -21,9 +22,10 @@ export class ProductService {
       title: '1984',
       author: 'George Orwell',
       price: 34.5,
-      image: 'https://images.unsplash.com/photo-1495446815901-a7297e2c6b3e?auto=format&fit=crop&w=400&q=80',
+      image: 'https://placehold.co/400x300/1f2937/ffffff?text=1984',
       rating: 4.7,
       description: 'Distopia poderosa que pergunta até onde vai o controle do Estado.',
+      stock: 3,
       available: true
     },
     {
@@ -34,7 +36,8 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=400&q=80',
       rating: 4.6,
       description: 'Mistério literário em Barcelona para leitores apaixonados.',
-      available: true
+      stock: 0,
+      available: false
     },
     {
       id: 4,
@@ -44,6 +47,7 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1473187983305-f615310e7daa?auto=format&fit=crop&w=400&q=80',
       rating: 4.3,
       description: 'Fábula espiritual sobre encontrar a própria lenda pessoal.',
+      stock: 6,
       available: true
     },
     {
@@ -54,6 +58,7 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80&sat=-100',
       rating: 4.7,
       description: 'História da humanidade contada com clareza e profundidade.',
+      stock: 4,
       available: true
     },
     {
@@ -64,6 +69,7 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=400&q=80',
       rating: 4.9,
       description: 'Aventura fantástica que abriu a Terra-média para milhões.',
+      stock: 9,
       available: true
     },
     {
@@ -74,6 +80,7 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80',
       rating: 4.4,
       description: 'Como mudar seu pensamento pode transformar trabalho e vida.',
+      stock: 5,
       available: true
     },
     {
@@ -84,7 +91,8 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80',
       rating: 4.6,
       description: 'Ciência dos hábitos para criar mudanças duradouras.',
-      available: true
+      stock: 0,
+      available: false
     },
     {
       id: 9,
@@ -94,6 +102,7 @@ export class ProductService {
       image: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=400&q=80',
       rating: 4.8,
       description: 'Romance emocionante sobre livros, guerra e resistência.',
+      stock: 1,
       available: true
     }
   ];
