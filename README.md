@@ -1,15 +1,26 @@
 # BibliON
 
-Aplicação de e-commerce de livros construída com Angular 21 + SSR. O projeto apresenta um catálogo de livros, carrinho de compras reativo e componentes standalone usando `signals` do Angular.
+Aplicação de e-commerce de livros construída com Angular 21 + SSR. O projeto apresenta um catálogo de livros completo, carrinho de compras persistente, página dedicada de produto e checkout com validações.
 
 ## Funcionalidades principais
 
-- Catálogo de livros com título, autor, preço, avaliação e descrição.
-- Carrinho de compras com adição de produtos, remoção, atualização de quantidade e total de itens.
-- Estrutura de componentes standalone (`ProductCardComponent`, `CartPanelComponent` e `App`).
-- Serviço de produtos (`ProductService`) com dados estáticos de exemplo.
-- Serviço de carrinho (`CartService`) usando `signals` para estado reativo.
-- Suporte a Server-Side Rendering (SSR) com `@angular/ssr` e `express`.
+- Catálogo com pelo menos 9 livros exibidos na página inicial.
+- Produto com página dedicada em `/product/:id` mostrando mais detalhes.
+- Destaque visual para livros com estoque baixo (5 ou menos unidades).
+- Produtos sem estoque exibem botão alternativo: `Me avise quando tiver em estoque`.
+- Carrinho de compras persistente em `localStorage`.
+- Atualização de quantidade no carrinho com limite pelo estoque disponível.
+- Remoção de produtos e limpeza do carrinho.
+- Badge no cabeçalho indicando quantidade de itens no carrinho.
+- Checkout com formulário de cadastro e validações obrigatórias:
+  - Nome completo
+  - CPF
+  - E-mail
+  - Endereço
+  - Método de pagamento
+- Cálculo automático de total, desconto e total com desconto.
+- Componente de checkout sem backend, mas com fluxo simulado de emissão de compra.
+- Suporte SSR com `@angular/ssr`.
 
 ## Como executar
 
@@ -36,7 +47,7 @@ http://localhost:4200/
 - `npm start` - inicia o servidor de desenvolvimento Angular.
 - `npm run build` - compila a aplicação para produção.
 - `npm run watch` - compila em modo de desenvolvimento com watch.
-- `npm run test` - executa testes de unidade com Vitest.
+- `npm run test` - executa testes de unidade com Vitest (se houver configuração de teste).
 - `npm run serve:ssr:Livraria-Digital` - executa a aplicação SSR gerada.
 
 ## Estrutura do projeto
@@ -45,15 +56,17 @@ http://localhost:4200/
 - `src/main.server.ts` - ponto de entrada do servidor Angular.
 - `src/server.ts` - servidor Express para SSR.
 - `src/app/app.ts` - componente raiz da aplicação.
+- `src/app/app.routes.ts` - configuração de rotas do app.
 - `src/app/services/product.service.ts` - serviço de produtos.
-- `src/app/services/cart.service.ts` - serviço de carrinho de compras.
-- `src/app/components/` - componentes de UI reutilizáveis.
+- `src/app/services/cart.service.ts` - serviço do carrinho de compras.
+- `src/app/components/` - componentes de interface, incluindo home, card, detalhe, carrinho e checkout.
 
 ## Tecnologias
 
 - Angular 21
 - TypeScript
 - Express
+- `@angular/ssr`
 - Vitest
 - Prettier
 
