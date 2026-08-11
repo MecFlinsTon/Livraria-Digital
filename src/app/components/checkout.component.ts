@@ -317,7 +317,7 @@ import { CartService } from '../services/cart.service';
   ]
 })
 export class CheckoutComponent {
-  private readonly cartService = inject(CartService);
+  protected readonly cartService = inject(CartService);
   private readonly router = inject(Router);
 
   readonly items = this.cartService.items;
