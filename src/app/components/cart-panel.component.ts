@@ -1,11 +1,12 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'cart-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <section class="cart-panel">
       <div class="cart-header">
@@ -38,17 +39,23 @@ import { CartService } from '../services/cart.service';
         </ul>
 
         <div class="cart-summary">
-          <div>
+          <div class="summary-row">
             <span>Total</span>
             <strong>R$ {{ totalPrice() | number:'1.2-2' }}</strong>
           </div>
-          <button type="button" class="checkout-button" [disabled]="!items().length" (click)="completePurchase()">
+          <div class="summary-row" *ngIf="cartService.discount() > 0">
+            <span>Desconto</span>
+            <strong>- R$ {{ cartService.discount() | number:'1.2-2' }}</strong>
+          </div>
+          <div class="summary-row total-after">
+            <span>Total com desconto</span>
+            <strong>R$ {{ cartService.totalAfterDiscount() | number:'1.2-2' }}</strong>
+          </div>
+          <button type="button" class="checkout-button" [disabled]="!items().length" [routerLink]="['/checkout']">
             Finalizar compra
           </button>
         </div>
-        <p class="checkout-message" *ngIf="checkoutMessage()">{{ checkoutMessage() }}</p>
       </ng-container>
-      <p class="checkout-message" *ngIf="checkoutMessage()">{{ checkoutMessage() }}</p>
 
       <ng-template #emptyCart>
         <p class="empty-text">Seu carrinho está vazio. Adicione um livro para começar.</p>
