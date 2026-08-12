@@ -1,10 +1,12 @@
-import { Injectable, signal, Signal } from '@angular/core';
+import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
 import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+  private readonly storageKey = 'livraria-digital-products';
+
   private readonly productsData: Product[] = [
     {
       id: 1,
@@ -107,7 +109,7 @@ export class ProductService {
     }
   ];
 
-  products: Signal<Product[]> = signal(this.productsData);
+  products: WritableSignal<Product[]> = signal(this.loadProducts());
 
   getAll(): Product[] {
     return this.products();
@@ -115,5 +117,45 @@ export class ProductService {
 
   getById(id: number): Product | undefined {
     return this.products().find(product => product.id === id);
+  }
+
+  create(product: Omit<Product, 'id'>): Product {
+    const list = this.products();
+    const nextId = list.length ? Math.max(...list.map(p => p.id)) + 1 : 1;
+    const newProduct: Product = { ...product, id: nextId };
+    this.products.set([...list, newProduct]);
+    this.saveProducts();
+    return newProduct;
+  }
+
+  update(updated: Product) {
+    this.products.set(this.products().map(p => p.id === updated.id ? { ...updated } : p));
+    this.saveProducts();
+  }
+
+  delete(id: number) {
+    this.products.set(this.products().filter(p => p.id !== id));
+    this.saveProducts();
+  }
+
+  private loadProducts(): Product[] {
+    try {
+      const saved = localStorage.getItem(this.storageKey);
+      if (!saved) {
+        return this.productsData;
+      }
+      const parsed = JSON.parse(saved) as Product[];
+      return Array.isArray(parsed) && parsed.length ? parsed : this.productsData;
+    } catch {
+      return this.productsData;
+    }
+  }
+
+  private saveProducts() {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.products()));
+    } catch {
+      // ignore
+    }
   }
 }
