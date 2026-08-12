@@ -124,7 +124,7 @@ import { CartService } from '../services/cart.service';
                 </small>
               </label>
 
-              <button type="submit" class="submit-button">Confirmar pedido</button>
+              <button type="submit" class="submit-button" [disabled]="orderCompleted()">{{ orderCompleted() ? 'Pedido confirmado' : 'Confirmar pedido' }}</button>
               <p class="form-message" *ngIf="submitted() && checkoutForm.invalid">Preencha todos os campos corretamente para continuar.</p>
             </form>
             <p class="success-message" *ngIf="checkoutMessage()">{{ checkoutMessage() }}</p>
@@ -193,7 +193,7 @@ import { CartService } from '../services/cart.service';
 
       .checkout-content {
         display: grid;
-        grid-template-columns: 1.4fr 1fr;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
         gap: 1.5rem;
       }
 
@@ -204,6 +204,8 @@ import { CartService } from '../services/cart.service';
         border-radius: 1rem;
         padding: 1.5rem;
         box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+        min-width: 0;
+        overflow: hidden;
       }
 
       .order-summary h2,
@@ -242,18 +244,25 @@ import { CartService } from '../services/cart.service';
       .checkout-form-card form {
         display: grid;
         gap: 1rem;
+        min-width: 0;
       }
 
       label {
         display: grid;
         gap: 0.5rem;
+        min-width: 0;
         font-weight: 600;
         color: #0f172a;
       }
 
       input,
-      textarea {
+      textarea,
+      select {
+        display: block;
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
         padding: 0.9rem 1rem;
         border-radius: 0.85rem;
         border: 1px solid #cbd5e1;
@@ -278,6 +287,10 @@ import { CartService } from '../services/cart.service';
         padding: 1rem 1.2rem;
         font-weight: 700;
         cursor: pointer;
+      }
+      .submit-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
       }
 
       .form-message,
@@ -313,6 +326,29 @@ import { CartService } from '../services/cart.service';
           grid-template-columns: 1fr;
         }
       }
+
+      @media (max-width: 640px) {
+        .checkout-page {
+          padding: 1rem 0.75rem;
+        }
+        .checkout-header,
+        .order-summary li,
+        .order-total {
+          display: grid;
+          align-items: start;
+        }
+        .back-link,
+        .shop-button,
+        .submit-button {
+          width: 100%;
+        }
+        .order-summary,
+        .checkout-form-card,
+        .empty-state {
+          width: 100%;
+          padding: 1rem;
+        }
+      }
     `
   ]
 })
@@ -324,11 +360,12 @@ export class CheckoutComponent {
   readonly totalPrice = this.cartService.totalPrice;
   readonly checkoutMessage = signal('');
   readonly submitted = signal(false);
+  readonly orderCompleted = signal(false);
 
   submitOrder(form: NgForm) {
     this.submitted.set(true);
 
-    if (!this.items().length) {
+    if (!this.items().length || this.orderCompleted()) {
       return;
     }
 
@@ -349,13 +386,17 @@ export class CheckoutComponent {
       return;
     }
 
-    this.cartService.clear();
+    this.orderCompleted.set(true);
+    this.submitted.set(false);
     this.checkoutMessage.set(
-      `Pedido emitido com sucesso! Obrigado, ${name}. Método de pagamento: ${this.paymentDescription(paymentMethod)}.`
+      `Pedido emitido com sucesso! Obrigado, ${name}. Metodo de pagamento: ${this.paymentDescription(paymentMethod)}.`
     );
+    form.resetForm();
 
     setTimeout(() => {
+      this.cartService.clear();
       this.checkoutMessage.set('');
+      this.orderCompleted.set(false);
       this.router.navigate(['/']);
     }, 4500);
   }
@@ -370,3 +411,6 @@ export class CheckoutComponent {
     return descriptions[method] ?? 'Método selecionado';
   }
 }
+
+
+
