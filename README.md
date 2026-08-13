@@ -42,6 +42,11 @@ npm start
 http://localhost:4200/
 ```
 
+## Acesso administrativo
+
+- Rota: `/admin`
+- Senha do administrador: `admin123`
+
 ## Scripts úteis
 
 - `npm start` - inicia o servidor de desenvolvimento Angular.
